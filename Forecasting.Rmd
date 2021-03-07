@@ -41,10 +41,7 @@ library(tidyverse)
 
 
 ## Load data
-<<<<<<< HEAD
 
-=======
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 ```{r}
 MyData <- readxl::read_excel("Arome Bakery - Data - R.xlsx", skip=0)
 ```
@@ -69,10 +66,7 @@ SC_Aberdeen_Test <- window(ts(MyData$`Specialty cakes - Aberdeen`, frequency = 1
 SC_Jordan_Test <- window(ts(MyData$`Specialty cakes - Jordan`, frequency = 1, start = 1), start = 93)
 ```
 
-<<<<<<< HEAD
 
-=======
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 ## Plot the time series
 
 ```{r}
@@ -137,8 +131,6 @@ plot_grid(autoplot(SB_Aberdeen_ma), autoplot(SB_Jordan_ma), autoplot(SC_Aberdeen
 Specialty Buns - Aberdeen
 
 ```{r}
-<<<<<<< HEAD
-
 SB_Aberdeen_ARIMA_Plot <- autoplot(SB_Aberdeen_ARIMA) +
   autolayer(SB_Aberdeen_Test, series = "Test set")
 
@@ -152,9 +144,6 @@ SB_Aberdeen_ma_Plot <- autoplot(SB_Aberdeen_ma) +
   autolayer(SB_Aberdeen_Test, series = "Test set")
 
 plot_grid(SB_Aberdeen_ARIMA_Plot, SB_Aberdeen_ets_Plot, SB_Aberdeen_nn_Plot, SB_Aberdeen_ma_Plot, ncol=2)
-=======
-plot_grid(autoplot(SB_Aberdeen_ARIMA), autoplot(SB_Aberdeen_ets), autoplot(SB_Aberdeen_nn), autoplot(SB_Aberdeen_ma), ncol=2)
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 
 accuracy(SB_Aberdeen_ARIMA, SB_Aberdeen_Test)
 accuracy(SB_Aberdeen_ets, SB_Aberdeen_Test)
@@ -166,7 +155,6 @@ accuracy(SB_Aberdeen_ma, SB_Aberdeen_Test)
 Specialty Cakes - Aberdeen
 
 ```{r}
-<<<<<<< HEAD
 SC_Aberdeen_ARIMA_Plot <- autoplot(SC_Aberdeen_ARIMA) +
   autolayer(SC_Aberdeen_Test, series = "Test set")
 
@@ -180,9 +168,6 @@ SC_Aberdeen_ma_Plot <- autoplot(SC_Aberdeen_ma) +
   autolayer(SC_Aberdeen_Test, series = "Test set")
 
 plot_grid(SC_Aberdeen_ARIMA_Plot, SC_Aberdeen_ets_Plot, SC_Aberdeen_nn_Plot, SC_Aberdeen_ma_Plot, ncol=2)
-=======
-plot_grid(autoplot(SC_Aberdeen_ARIMA), autoplot(SC_Aberdeen_ets), autoplot(SC_Aberdeen_nn), autoplot(SC_Aberdeen_ma), ncol=2)
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 
 accuracy(SC_Aberdeen_ARIMA, SC_Aberdeen_Test)
 accuracy(SC_Aberdeen_ets, SC_Aberdeen_Test)
@@ -194,7 +179,6 @@ accuracy(SC_Aberdeen_ma, SC_Aberdeen_Test)
 Specialty Buns - Jordan
 
 ```{r}
-<<<<<<< HEAD
 SB_Jordan_ARIMA_Plot <- autoplot(SB_Jordan_ARIMA) +
   autolayer(SB_Jordan_Test, series = "Test set")
 
@@ -208,9 +192,6 @@ SB_Jordan_ma_Plot <- autoplot(SB_Jordan_ma) +
   autolayer(SB_Jordan_Test, series = "Test set")
 
 plot_grid(SB_Jordan_ARIMA_Plot, SB_Jordan_ets_Plot, SB_Jordan_nn_Plot, SB_Jordan_ma_Plot, ncol=2)
-=======
-plot_grid(autoplot(SB_Jordan_ARIMA), autoplot(SB_Jordan_ets), autoplot(SB_Jordan_nn), autoplot(SB_Jordan_ma), ncol=2)
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 
 accuracy(SB_Jordan_ARIMA, SB_Jordan_Test)
 accuracy(SB_Jordan_ets, SB_Jordan_Test)
@@ -222,7 +203,6 @@ accuracy(SB_Jordan_ma, SB_Jordan_Test)
 Specialty Cakes - Jordan
 
 ```{r}
-<<<<<<< HEAD
 SC_Jordan_ARIMA_Plot <- autoplot(SC_Jordan_ARIMA) +
   autolayer(SC_Jordan_Test, series = "Test set")
 
@@ -236,9 +216,6 @@ SC_Jordan_ma_Plot <- autoplot(SC_Jordan_ma) +
   autolayer(SC_Jordan_Test, series = "Test set")
 
 plot_grid(SC_Jordan_ARIMA_Plot, SC_Jordan_ets_Plot, SC_Jordan_nn_Plot, SC_Jordan_ma_Plot, ncol=2)
-=======
-plot_grid(autoplot(SC_Jordan_ARIMA), autoplot(SC_Jordan_ets), autoplot(SC_Jordan_nn), autoplot(SC_Jordan_ma), ncol=2)
->>>>>>> efe37ae915a1ccc39feaa1de3a14f93750cc0053
 
 accuracy(SC_Jordan_ARIMA, SC_Jordan_Test)
 accuracy(SC_Jordan_ets, SC_Jordan_Test)

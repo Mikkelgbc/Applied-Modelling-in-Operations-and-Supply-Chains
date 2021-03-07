@@ -1,0 +1,175 @@
+---
+title: "Case - Forecasting"
+author:
+    
+  - name: [Mikkel Groth B Christensen]
+    affiliation: cand.merc (OSCM)
+date: "`r Sys.Date()`"
+repository_url: [https://github.com/Mikkelgbc/Applied-Modelling-in-Operations-and-Supply-Chains.git]
+creative_commons: CC BY-NC
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    toc_float: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE}
+if (interactive()) setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) # set working dir to current file location
+knitr::opts_chunk$set(
+  cache = TRUE, autodep = TRUE,
+  echo = TRUE, 
+  layout="l-page", fig.width = 12)
+```
+
+
+# Load Packages
+
+```{r}
+library(forecast)
+library(fpp2)
+library(stats)
+library(graphics)
+library(skimr)
+library(gridExtra)
+library(rmarkdown)
+library(cowplot)
+library(tidyverse)
+```
+
+
+## Load data
+```{r}
+MyData <- readxl::read_excel("Arome Bakery - Data - R.xlsx", skip=0)
+```
+
+
+## Load time series (Training set)
+
+```{r}
+SB_Aberdeen <- window(ts(MyData$`Specialty Buns - Aberdeen`, frequency = 1, start = 1), end = 92)
+SB_Jordan <- window(ts(MyData$`Specialty Buns - Jordan`, frequency = 1, start = 1), end = 92)
+SC_Aberdeen <- window(ts(MyData$`Specialty cakes - Aberdeen`, frequency = 1, start = 1), end = 92)
+SC_Jordan <- window(ts(MyData$`Specialty cakes - Jordan`, frequency = 1, start = 1), end = 92)
+```
+
+
+## Load time series (Test set)
+
+```{r}
+SB_Aberdeen_Test <- window(ts(MyData$`Specialty Buns - Aberdeen`, frequency = 1, start = 1), start = 93)
+SB_Jordan_Test <- window(ts(MyData$`Specialty Buns - Jordan`, frequency = 1, start = 1), start = 93)
+SC_Aberdeen_Test <- window(ts(MyData$`Specialty cakes - Aberdeen`, frequency = 1, start = 1), start = 93)
+SC_Jordan_Test <- window(ts(MyData$`Specialty cakes - Jordan`, frequency = 1, start = 1), start = 93)
+```
+
+## Plot the time series
+
+```{r}
+SB_Aberdeen_Plot <- autoplot(SB_Aberdeen)
+SB_Jordan_Plot <- autoplot(SB_Jordan)
+SC_Aberdeen_Plot <- autoplot(SC_Aberdeen)
+SC_Jordan_Plot <- autoplot(SC_Jordan)
+
+plot_grid(SB_Aberdeen_Plot, SC_Aberdeen_Plot, SB_Jordan_Plot, SC_Jordan_Plot, ncol=2)
+```
+
+
+## Forecast using ARIMA
+
+```{r}
+SB_Aberdeen_ARIMA <- forecast(auto.arima(SB_Aberdeen), h=30)
+SB_Jordan_ARIMA <- forecast(auto.arima(SB_Jordan), h=30)
+SC_Aberdeen_ARIMA <- forecast(auto.arima(SC_Aberdeen), h=30)
+SC_Jordan_ARIMA <- forecast(auto.arima(SC_Jordan), h=30)
+
+plot_grid(autoplot(SB_Aberdeen_ARIMA), autoplot(SB_Jordan_ARIMA), autoplot(SC_Aberdeen_ARIMA), autoplot(SC_Jordan_ARIMA), ncol=2)
+```
+
+
+## Forecast using Exponential Smoothing
+
+```{r}
+SB_Aberdeen_ets <- forecast(ets(SB_Aberdeen), h=30)
+SB_Jordan_ets <- forecast(ets(SB_Jordan), h=30)
+SC_Aberdeen_ets <- forecast(ets(SC_Aberdeen), h=30)
+SC_Jordan_ets <- forecast(ets(SC_Jordan), h=30)
+
+plot_grid(autoplot(SB_Aberdeen_ets), autoplot(SB_Jordan_ets), autoplot(SC_Aberdeen_ets), autoplot(SC_Jordan_ets), ncol=2)
+```
+
+
+## Forecast using Neural Network
+
+```{r}
+SB_Aberdeen_nn <- forecast(nnetar(SB_Aberdeen), h=30)
+SB_Jordan_nn <- forecast(nnetar(SB_Jordan), h=30)
+SC_Aberdeen_nn <- forecast(nnetar(SC_Aberdeen), h=30)
+SC_Jordan_nn <- forecast(nnetar(SC_Jordan), h=30)
+
+plot_grid(autoplot(SB_Aberdeen_nn), autoplot(SB_Jordan_nn), autoplot(SC_Aberdeen_nn), autoplot(SC_Jordan_nn), ncol=2)
+```
+
+## Forecast using Moving Average
+
+```{r}
+SB_Aberdeen_ma <- forecast(ma(SB_Aberdeen, order = 7), h=30)
+SB_Jordan_ma <- forecast(ma(SB_Jordan, order = 7), h=30)
+SC_Aberdeen_ma <- forecast(ma(SC_Aberdeen, order = 7), h=30)
+SC_Jordan_ma <- forecast(ma(SC_Jordan, order = 7), h=30)
+
+plot_grid(autoplot(SB_Aberdeen_ma), autoplot(SB_Jordan_ma), autoplot(SC_Aberdeen_ma), autoplot(SC_Jordan_ma), ncol=2)
+```
+
+
+## Check accuracy
+
+Specialty Buns - Aberdeen
+
+```{r}
+plot_grid(autoplot(SB_Aberdeen_ARIMA), autoplot(SB_Aberdeen_ets), autoplot(SB_Aberdeen_nn), autoplot(SB_Aberdeen_ma), ncol=2)
+
+accuracy(SB_Aberdeen_ARIMA, SB_Aberdeen_Test)
+accuracy(SB_Aberdeen_ets, SB_Aberdeen_Test)
+accuracy(SB_Aberdeen_nn, SB_Aberdeen_Test)
+accuracy(SB_Aberdeen_ma, SB_Aberdeen_Test)
+```
+
+
+Specialty Cakes - Aberdeen
+
+```{r}
+plot_grid(autoplot(SC_Aberdeen_ARIMA), autoplot(SC_Aberdeen_ets), autoplot(SC_Aberdeen_nn), autoplot(SC_Aberdeen_ma), ncol=2)
+
+accuracy(SC_Aberdeen_ARIMA, SC_Aberdeen_Test)
+accuracy(SC_Aberdeen_ets, SC_Aberdeen_Test)
+accuracy(SC_Aberdeen_nn, SC_Aberdeen_Test)
+accuracy(SC_Aberdeen_ma, SC_Aberdeen_Test)
+```
+
+
+Specialty Buns - Jordan
+
+```{r}
+plot_grid(autoplot(SB_Jordan_ARIMA), autoplot(SB_Jordan_ets), autoplot(SB_Jordan_nn), autoplot(SB_Jordan_ma), ncol=2)
+
+accuracy(SB_Jordan_ARIMA, SB_Jordan_Test)
+accuracy(SB_Jordan_ets, SB_Jordan_Test)
+accuracy(SB_Jordan_nn, SB_Jordan_Test)
+accuracy(SB_Jordan_ma, SB_Jordan_Test)
+```
+
+
+Specialty Cakes - Jordan
+
+```{r}
+plot_grid(autoplot(SC_Jordan_ARIMA), autoplot(SC_Jordan_ets), autoplot(SC_Jordan_nn), autoplot(SC_Jordan_ma), ncol=2)
+
+accuracy(SC_Jordan_ARIMA, SC_Jordan_Test)
+accuracy(SC_Jordan_ets, SC_Jordan_Test)
+accuracy(SC_Jordan_nn, SC_Jordan_Test)
+accuracy(SC_Jordan_ma, SC_Jordan_Test)
+```
+
